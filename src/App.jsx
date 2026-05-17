@@ -81,7 +81,91 @@ const styleSheet = `
   .xray-container:hover .xray-core-glow {
     filter: drop-shadow(0px 0px 15px rgba(234, 88, 12, 0.6));
   }
+
+  /* Fennec Logo */
+  @keyframes fennecDraw {
+    from { stroke-dasharray: 0 1000; }
+    to   { stroke-dasharray: 1000 0; }
+  }
+  @keyframes fennecParticle {
+    0%   { opacity: 0; }
+    3%   { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes fennecEyeIn {
+    0%   { opacity: 0; transform: scale(0.3); }
+    60%  { opacity: 1; transform: scale(1.35); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fennecBlink {
+    0%, 88%, 100% { transform: scaleY(1); }
+    94%           { transform: scaleY(0.07); }
+  }
+  .fennec-outline {
+    stroke-dasharray: 0 1000;
+    filter: drop-shadow(0 0 3px #C9921A) drop-shadow(0 0 6px rgba(201,146,26,0.45));
+    animation: fennecDraw 2s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  .fennec-particle {
+    opacity: 0;
+    filter: drop-shadow(0 0 5px #FFD700) drop-shadow(0 0 10px #FFD700);
+    animation: fennecParticle 2s ease-in-out forwards;
+  }
+  .fennec-eye-glow {
+    filter: drop-shadow(0 0 4px #FFD700) drop-shadow(0 0 8px rgba(255,215,0,0.8));
+  }
+  .fennec-eye-group {
+    opacity: 0;
+    animation: fennecEyeIn 0.6s ease-out 1.9s forwards;
+  }
+  .fennec-eye-blink {
+    animation: fennecBlink 5s ease-in-out 3s infinite;
+  }
 `;
+
+// --- LOGO FENNEC ANIMÉ ---
+const FENNEC_PATH = "M 78,2 L 92,32 L 95,55 C 93,72 85,86 70,94 L 50,100 L 30,94 C 15,86 7,72 5,55 L 8,32 L 22,2 C 24,16 28,28 32,38 C 38,33 44,30 50,30 C 56,30 62,33 68,38 C 72,28 76,16 78,2 Z";
+
+const FennecLogo = ({ className = "w-9 h-11" }) => (
+  <svg viewBox="0 0 100 105" className={className} aria-label="BIM-DZ Fennec Logo">
+    {/* Silhouette noire */}
+    <path d={FENNEC_PATH} fill="#0f172a" />
+
+    {/* Contour doré animé droite → gauche */}
+    <path
+      d={FENNEC_PATH}
+      fill="none"
+      stroke="#C9921A"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      pathLength="1000"
+      className="fennec-outline"
+    />
+
+    {/* Particule de lumière qui trace le chemin */}
+    <circle r="3.5" fill="#FFD700" className="fennec-particle">
+      <animateMotion dur="2s" fill="freeze" path={FENNEC_PATH} />
+    </circle>
+
+    {/* Œil gauche */}
+    <g className="fennec-eye-group" style={{ transformOrigin: '33px 65px' }}>
+      <g className="fennec-eye-blink" style={{ transformOrigin: '33px 65px' }}>
+        <ellipse cx="33" cy="65" rx="5" ry="4" fill="#C9921A" className="fennec-eye-glow" />
+        <ellipse cx="33" cy="65" rx="2.5" ry="2" fill="#0f172a" />
+      </g>
+    </g>
+
+    {/* Œil droit */}
+    <g className="fennec-eye-group" style={{ transformOrigin: '67px 65px' }}>
+      <g className="fennec-eye-blink" style={{ transformOrigin: '67px 65px' }}>
+        <ellipse cx="67" cy="65" rx="5" ry="4" fill="#C9921A" className="fennec-eye-glow" />
+        <ellipse cx="67" cy="65" rx="2.5" ry="2" fill="#0f172a" />
+      </g>
+    </g>
+  </svg>
+);
 
 // --- SVG HERO PAGE OUTILS & PLUGINS ---
 const ToolsHeroSketch = () => (
@@ -1033,10 +1117,8 @@ export default function App() {
       <nav className="sticky top-0 z-50 bg-white border-b-4 border-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <div onClick={() => setCurrentPage('home')} className="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
-              <div className="w-10 h-10 bg-orange-600 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] flex items-center justify-center rounded-sm transform -rotate-3 group-hover:rotate-0 transition-transform">
-                <span className="text-white font-black tracking-tighter text-xl">B</span>
-              </div>
+            <div onClick={() => setCurrentPage('home')} className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+              <FennecLogo className="w-9 h-11" />
               <span className="font-black text-2xl tracking-tight text-slate-900 uppercase">BIM-DZ</span>
             </div>
             <div className="hidden md:flex space-x-8 items-center font-bold">
@@ -1092,10 +1174,8 @@ export default function App() {
       </main>
       <footer className="bg-white border-t-4 border-slate-900 pt-16 pb-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-orange-600 border-2 border-slate-900 flex items-center justify-center">
-              <span className="text-white text-sm font-black">B</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <FennecLogo className="w-7 h-9" />
             <span className="font-black text-xl tracking-tight text-slate-900 uppercase">BIM-DZ</span>
           </div>
           <div className="text-sm text-slate-600 font-bold">
