@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HUB STORES</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #060606;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg { width: 100%; height: 100%; }
+
+    /* Traits communs ligne + cintre */
+    .entry-line, .hanger-stroke {
+      stroke: #C9A84C;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+    }
+
+    .entry-line {
+      /* dessine puis disparaît — ne reste plus visible */
+      animation:
+        draw    0.55s cubic-bezier(.4,0,.2,1) 0.05s forwards,
+        fadeOut 0.5s  ease                   1.0s  forwards;
+    }
+
+    .hanger-stroke {
+      fill: none;
+      stroke-linejoin: round;
+      filter: url(#glow);
+      animation: draw 2.2s cubic-bezier(.4,0,.2,1) 0.48s forwards;
+    }
+
+    /* Feuille dans l'air — amplitudes irrégulières, vitesse organique */
+    .hanger-group {
+      transform-origin: 516px 120px;
+      animation: leafWind 5.5s ease-in-out 2.8s infinite;
+    }
+
+    .brand {
+      opacity: 0;
+      animation: fadeUp 1.1s ease 2.4s forwards;
+    }
+
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    /* Amplitudes et timings volontairement asymétriques → effet feuille */
+    @keyframes leafWind {
+      0%   { transform: rotate(-10deg); }
+      18%  { transform: rotate(13deg);  }
+      34%  { transform: rotate(-14deg); }
+      50%  { transform: rotate(8deg);   }
+      67%  { transform: rotate(-8deg);  }
+      83%  { transform: rotate(12deg);  }
+      100% { transform: rotate(-10deg); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<svg viewBox="0 0 1000 590"
+     preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg">
+  <defs>
+
+    <!-- Dégradé or pour le texte -->
+    <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#9a6e0c"/>
+      <stop offset="45%"  stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </linearGradient>
+
+    <!-- Lueur douce sur le cintre -->
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+  <!-- 1. Ligne entrée depuis la gauche -->
+  <line class="entry-line"
+        x1="-80" y1="232" x2="242" y2="232"
+        pathLength="100"/>
+
+  <!-- 2. Cintre : tracé progressif puis pendule -->
+  <g class="hanger-group">
+    <path class="hanger-stroke" pathLength="100"
+      d="M 242,232
+         C 310,215 440,180 492,172
+         C 492,162 496,140 503,130
+         C 511,119 524,118 530,127
+         C 537,137 534,150 526,156
+         C 519,162 509,164 503,161
+         C 497,158 492,154 492,172
+         C 544,180 690,215 758,232
+         L 760,370 L 240,370 L 242,232"/>
+  </g>
+
+  <!-- 3. Texte -->
+  <g class="brand">
+
+    <!-- Nom principal -->
+    <text
+      x="500" y="452"
+      text-anchor="middle"
+      font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="86"
+      font-weight="100"
+      letter-spacing="36"
+      fill="url(#gGold)">HUB</text>
+
+    <!-- Séparateur fin -->
+    <line
+      x1="300" y1="470"
+      x2="700" y2="470"
+      stroke="rgba(201,168,76,0.4)"
+      stroke-width="0.8"/>
+
+    <!-- Sous-titre -->
+    <text
+      x="506" y="498"
+      text-anchor="middle"
+      font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="13.5"
+      font-weight="300"
+      letter-spacing="17"
+      fill="rgba(255,255,255,0.55)">STORES</text>
+
+  </g>
+</svg>
+</body>
+</html>
