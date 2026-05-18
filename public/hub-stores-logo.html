@@ -28,7 +28,10 @@
     }
 
     .entry-line {
-      animation: draw 0.55s cubic-bezier(.4,0,.2,1) 0.05s forwards;
+      /* dessine puis disparaît — ne reste plus visible */
+      animation:
+        draw    0.55s cubic-bezier(.4,0,.2,1) 0.05s forwards,
+        fadeOut 0.5s  ease                   1.0s  forwards;
     }
 
     .hanger-stroke {
@@ -38,10 +41,10 @@
       animation: draw 2.2s cubic-bezier(.4,0,.2,1) 0.48s forwards;
     }
 
-    /* Pendule — pivot au sommet du crochet (≈516,120 dans le viewBox) */
+    /* Feuille dans l'air — amplitudes irrégulières, vitesse organique */
     .hanger-group {
       transform-origin: 516px 120px;
-      animation: pendulum 2.6s cubic-bezier(0.42,0,0.58,1) 2.8s infinite alternate;
+      animation: leafWind 5.5s ease-in-out 2.8s infinite;
     }
 
     .brand {
@@ -53,9 +56,19 @@
       to { stroke-dashoffset: 0; }
     }
 
-    @keyframes pendulum {
-      from { transform: rotate(-22deg); }
-      to   { transform: rotate(22deg); }
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    /* Amplitudes et timings volontairement asymétriques → effet feuille */
+    @keyframes leafWind {
+      0%   { transform: rotate(-10deg); }
+      18%  { transform: rotate(13deg);  }
+      34%  { transform: rotate(-14deg); }
+      50%  { transform: rotate(8deg);   }
+      67%  { transform: rotate(-8deg);  }
+      83%  { transform: rotate(12deg);  }
+      100% { transform: rotate(-10deg); }
     }
 
     @keyframes fadeUp {
